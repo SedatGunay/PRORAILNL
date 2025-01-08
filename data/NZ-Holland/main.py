@@ -40,7 +40,7 @@ class RailNetwork:
                 self.connection_map[station1].append((station2, distance))
                 self.connection_map[station2].append((station1, distance))
 
-    def greedy_trajectories(self, max_stations, max_time):
+    def greedy(self, max_stations, max_time):
         visited_connections = set()
         trajectories = []
 
@@ -83,7 +83,7 @@ if __name__ == "__main__":
     # Run the greedy algorithm
     max_stations = 7
     max_time = 120
-    trajectories = rail_network.greedy_trajectories(max_stations, max_time)
+    trajectories = rail_network.greedy(max_stations, max_time)
 
     # Output the results of the greedy algorithm
     print("\nGenerated Trajectories:")
