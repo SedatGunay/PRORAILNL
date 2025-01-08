@@ -40,7 +40,7 @@ class RailNetwork:
                 self.connection_map[station1].append((station2, distance))
                 self.connection_map[station2].append((station1, distance))
 
-    def greedy(self, max_stations, max_time):
+    def greedy(self, max_trajectories, max_time):
         visited_connections = set()
         trajectories = []
 
@@ -49,7 +49,7 @@ class RailNetwork:
             trajectory = [current_station]
             total_time = 0
 
-            while len(trajectory) <= max_stations:
+            while len(trajectories) <= max_trajectories:
                 next_connection = None
 
                 for neighbor_station, time in self.connection_map[current_station]:
@@ -81,9 +81,9 @@ if __name__ == "__main__":
     rail_network.load_connections("data/NZ-Holland/ConnectiesHolland.csv")
 
     # Run the greedy algorithm
-    max_stations = 7
+    max_trajectories = 7
     max_time = 120
-    trajectories = rail_network.greedy(max_stations, max_time)
+    trajectories = rail_network.greedy(max_trajectories, max_time)
 
     # Output the results of the greedy algorithm
     print("\nGenerated Trajectories:")
