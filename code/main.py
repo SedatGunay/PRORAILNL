@@ -40,7 +40,7 @@ class RailNetwork:
                 self.connection_map[station1].append((station2, distance))
                 self.connection_map[station2].append((station1, distance))
 
-    def greedy(self, max_trajectories, max_time):
+    def gerenerate_trajectories(self, max_trajectories, max_time):
         visited_connections = set()
         trajectories = []
 
@@ -80,12 +80,12 @@ if __name__ == "__main__":
     rail_network.load_stations("data/NZ-Holland/StationsHolland.csv")
     rail_network.load_connections("data/NZ-Holland/ConnectiesHolland.csv")
 
-    # Run the greedy algorithm
+    # Run the algorithm
     max_trajectories = 7
     max_time = 120
-    trajectories = rail_network.greedy(max_trajectories, max_time)
+    trajectories = rail_network.gerenerate_trajectories(max_trajectories, max_time)
 
-    # Output the results of the greedy algorithm
+    # Output the results of the algorithm
     print("\nGenerated Trajectories:")
     for i, (trajectory, time) in enumerate(trajectories, 1):
         print(f"Trajectory {i}: {' -> '.join(trajectory)} (Total Time: {time} minutes)")
