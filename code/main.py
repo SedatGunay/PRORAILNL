@@ -1,5 +1,6 @@
 import csv
 from collections import defaultdict
+from visualize import visualize_network
 
 class Station:
     def __init__(self, name, x, y):
@@ -40,8 +41,8 @@ class RailNetwork:
                 self.connection_map[station1].append((station2, distance))
                 self.connection_map[station2].append((station1, distance))
 
-    def gerenerate_trajectories(self, max_trajectories, max_time):
-        visited_connections = set()
+    def greedy(self, max_stations, max_time):
+        self.visited_connections = set()
         trajectories = []
 
         for start_station in self.stations.keys():
@@ -53,7 +54,7 @@ class RailNetwork:
                 next_connection = None
 
                 for neighbor_station, time in self.connection_map[current_station]:
-                    if (current_station, neighbor_station) not in visited_connections and (neighbor_station, current_station) not in visited_connections:
+                    if (current_station, neighbor_station) not in self.visited_connections and (neighbor_station, current_station) not in self.visited_connections:
                         if total_time + time <= max_time:
                             next_connection = (neighbor_station, time)
                             break
@@ -61,8 +62,8 @@ class RailNetwork:
                 if next_connection:
                     neighbor_station, time = next_connection
                     trajectory.append(neighbor_station)
-                    visited_connections.add((current_station, neighbor_station))
-                    visited_connections.add((neighbor_station, current_station))
+                    self.visited_connections.add((current_station, neighbor_station))
+                    self.visited_connections.add((neighbor_station, current_station))
                     total_time += time
                     current_station = neighbor_station
                 else:
@@ -72,6 +73,16 @@ class RailNetwork:
                 trajectories.append((trajectory, total_time))
 
         return trajectories
+    
+    def K_score(self):
+        """ Calculate K score based on fraction ridden connections and number of trajectories"""
+        p = len(self.visted_connections) / len(self.stations)
+        T = len(trajectories)
+
+        Min = self.total_time
+
+        K = p * 10000 - (T * 100 + Min)
+        return K
 
 if __name__ == "__main__":
     rail_network = RailNetwork()
@@ -85,7 +96,11 @@ if __name__ == "__main__":
     max_time = 120
     trajectories = rail_network.gerenerate_trajectories(max_trajectories, max_time)
 
-    # Output the results of the algorithm
+    # visualize trajectory network
+    visualize_network(rail_network, trajectories)
+    # Output the results of the greedy algorithm
     print("\nGenerated Trajectories:")
     for i, (trajectory, time) in enumerate(trajectories, 1):
         print(f"Trajectory {i}: {' -> '.join(trajectory)} (Total Time: {time} minutes)")
+
+   
