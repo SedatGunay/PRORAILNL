@@ -35,24 +35,15 @@ def visualize_network(rail_network, trajectories):
     plt.title("Rail Network Trajectories")
     plt.show()
 
-def visualize_k_scores(k_scores, title="Distribution of K-Scores"):
-    """
-    Plots a histogram of K-scores to visualize their distribution.
-    
-    Parameters:
-        k_scores (list of float): The K-scores obtained from the algorithm.
-        title (str): The title of the histogram.
-    """
-    mean_k = np.mean(k_scores)
-    median_k = np.median(k_scores)
-
+def visualize_k_scores(k_scores):
+    """Visualiseer de K-scores per iteratie in een histogram."""
     plt.figure(figsize=(10, 6))
-    plt.hist(k_scores, bins=10, color='blue', edgecolor='black', alpha=0.7)
-    plt.axvline(mean_k, color='red', linestyle='dashed', linewidth=1, label=f'Mean: {mean_k:.2f}')
-    plt.axvline(median_k, color='green', linestyle='dashed', linewidth=1, label=f'Median: {median_k:.2f}')
-    plt.title(title)
-    plt.xlabel("K-Score")
-    plt.ylabel("Frequency")
-    plt.legend()
-    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    
+
+    plt.plot(range(1, len(k_scores) + 1), k_scores, linestyle='-', color='b')
+    
+    plt.xlabel('Iteraties')
+    plt.ylabel('K-score')
+    plt.title('K-scores per Iteratie')
+    
     plt.show()
