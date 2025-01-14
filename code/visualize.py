@@ -39,7 +39,6 @@ def visualize_k_scores(k_scores):
     """Visualiseer de K-scores per iteratie in een histogram."""
     plt.figure(figsize=(10, 6))
     
-
     plt.plot(range(1, len(k_scores) + 1), k_scores, linestyle='-', color='b')
     
     plt.xlabel('Iteraties')
