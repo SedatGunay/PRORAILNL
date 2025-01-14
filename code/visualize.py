@@ -1,6 +1,7 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 from collections import defaultdict
+import numpy as np
 
 def visualize_network(rail_network, trajectories):
     """ Makes a graph of the connections of the trajectories to show the network"""
@@ -34,4 +35,24 @@ def visualize_network(rail_network, trajectories):
     plt.title("Rail Network Trajectories")
     plt.show()
 
+def visualize_k_scores(k_scores, title="Distribution of K-Scores"):
+    """
+    Plots a histogram of K-scores to visualize their distribution.
+    
+    Parameters:
+        k_scores (list of float): The K-scores obtained from the algorithm.
+        title (str): The title of the histogram.
+    """
+    mean_k = np.mean(k_scores)
+    median_k = np.median(k_scores)
 
+    plt.figure(figsize=(10, 6))
+    plt.hist(k_scores, bins=10, color='blue', edgecolor='black', alpha=0.7)
+    plt.axvline(mean_k, color='red', linestyle='dashed', linewidth=1, label=f'Mean: {mean_k:.2f}')
+    plt.axvline(median_k, color='green', linestyle='dashed', linewidth=1, label=f'Median: {median_k:.2f}')
+    plt.title(title)
+    plt.xlabel("K-Score")
+    plt.ylabel("Frequency")
+    plt.legend()
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    plt.show()

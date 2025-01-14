@@ -1,6 +1,6 @@
 import csv
 from collections import defaultdict
-from visualize import visualize_network
+from code.visualize import visualize_network, visualize_k_scores
 import random
 
 class Station:
@@ -109,19 +109,37 @@ class RailNetwork:
             if len(trajectory) > 1:
                 trajectories.append((trajectory, total_time))
 
-        return trajectories
+        return trajectories, total_time
     
-    def K_score(self):
-        """ Calculate K score based on fraction ridden connections and number of trajectories"""
-        p = len(self.visted_connections) / len(self.stations)
-        T = len(trajectories)
+    def calculate_k_score(self, visited_connections, trajectories, total_time):
+        """
+        Calculate K-score based on fraction ridden connections, number of trajectories, and total time.
 
-        Min = self.total_time
+        Parameters:
+            visited_connections (set): The set of all visited connections.
+            trajectories (list of tuples): List of trajectories and their total times.
+            total_time (int): Total time spent on all trajectories.
 
-        K = p * 10000 - (T * 100 + Min)
+        Returns:
+            float: The K-score for the current set of trajectories.
+        """
+        p = len(visited_connections) / len(self.connections)  # Fraction of ridden connections
+        T = len(trajectories)  # Number of trajectories
+
+        K = p * 10000 - (T * 100 + total_time)
         return K
     
+    def trajectories_with_iterations(self, max_trajectories, max_time, iterations):
+        k_scores = []
 
+        for i in range(iterations):
+            trajectories, total_time = self.gerenerate_trajectories(max_trajectories, max_time)
+            k_score = self.calculate_k_score(self.connection_map, trajectories, total_time)
+            k_scores.append(k_score)
+
+        return k_scores
+
+        
 if __name__ == "__main__":
     rail_network = RailNetwork()
 
@@ -132,12 +150,18 @@ if __name__ == "__main__":
     # Run the algorithm
     max_trajectories = 7
     max_time = 120
-    trajectories = rail_network.gerenerate_trajectories(max_trajectories, max_time)
+    trajectories, total_time = rail_network.gerenerate_trajectories(max_trajectories, max_time)
+    iterations = 100
 
     # visualize trajectory network
-    visualize_network(rail_network, trajectories)
+    #visualize_network(rail_network, trajectories)
     # Output the results of the algorithm
-    #print("\nGenerated Trajectories:")
-    #for i, (trajectory, time) in enumerate(trajectories, 1):
-       # print(f"Trajectory {i}: {' -> '.join(trajectory)} (Total Time: {time} minutes)")
+    print("\nGenerated Trajectories:")
+    for i, (trajectory, time) in enumerate(trajectories, 1):
+       print(f"Trajectory {i}: {' -> '.join(trajectory)} (Total Time: {time} minutes)")
 
+    # Run multiple iterations and get K-scores
+    k_scores = rail_network.trajectories_with_iterations(max_trajectories, max_time, iterations)
+
+    # Visualize the K-scores
+    visualize_k_scores(k_scores)
