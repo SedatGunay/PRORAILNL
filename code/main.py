@@ -1,6 +1,7 @@
 import csv
 from collections import defaultdict
 from visualize import visualize_network
+import random
 
 class Station:
     def __init__(self, name, x, y):
@@ -78,12 +79,15 @@ class RailNetwork:
         visited_connections = set()
         trajectories = []
 
-        for start_station in self.stations.keys():
+        # Randomly select 7 starting stations
+        start_stations = random.sample(list(self.stations.keys()), max_trajectories)
+
+        for start_station in start_stations:
             current_station = start_station
             trajectory = [current_station]
             total_time = 0
 
-            while len(trajectories) <= max_trajectories:
+            while True:
                 next_connection = None
 
                 for neighbor_station, time in self.connection_map[current_station]:
@@ -132,8 +136,8 @@ if __name__ == "__main__":
 
     # visualize trajectory network
     visualize_network(rail_network, trajectories)
-    # Output the results of the greedy algorithm
-    print("\nGenerated Trajectories:")
-    for i, (trajectory, time) in enumerate(trajectories, 1):
-        print(f"Trajectory {i}: {' -> '.join(trajectory)} (Total Time: {time} minutes)")
+    # Output the results of the algorithm
+    #print("\nGenerated Trajectories:")
+    #for i, (trajectory, time) in enumerate(trajectories, 1):
+       # print(f"Trajectory {i}: {' -> '.join(trajectory)} (Total Time: {time} minutes)")
 
