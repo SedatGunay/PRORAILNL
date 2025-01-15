@@ -36,13 +36,13 @@ def visualize_network(rail_network, trajectories):
     plt.show()
 
 def visualize_k_scores(k_scores):
-    """Visualiseer de K-scores per iteratie in een histogram."""
+    """Visualiseer de K-scores per iteratie in een histogram met kleine bins."""
     plt.figure(figsize=(10, 6))
     
-    plt.plot(range(1, len(k_scores) + 1), k_scores, linestyle='-', color='b')
+    plt.hist(k_scores, bins=100, color='blue', edgecolor='black', alpha=0.7)
     
-    plt.xlabel('Iteraties')
-    plt.ylabel('K-score')
-    plt.title('K-scores per Iteratie')
+    plt.xlabel('K-scores')
+    plt.ylabel('Frequentie')
+    plt.title('Histogram van K-scores')
     
     plt.show()

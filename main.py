@@ -151,7 +151,7 @@ if __name__ == "__main__":
     max_trajectories = 7
     max_time = 120
     trajectories, total_time = rail_network.gerenerate_trajectories(max_trajectories, max_time)
-    iterations = 100
+    iterations = 10000
 
     # visualize trajectory network
     #visualize_network(rail_network, trajectories)
