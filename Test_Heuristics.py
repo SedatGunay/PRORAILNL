@@ -69,20 +69,25 @@ class Heuristics:
         return self.station_visit_count[station] < max_visits
 
     def minimize_overlapping_connections(self, current_station, next_station):
-        # Vermijd het hergebruiken van dezelfde verbinding
-        return (current_station, next_station) not in self.visited_connections
+        # Hergebruik van verbindingen alleen vermijden als alternatieven beschikbaar zijn
+        if len(self.rail_network.connection_map[current_station]) > 1:
+            return (current_station, next_station) not in self.visited_connections
+        return True
 
-    def prioritize_unvisited_and_short_connections(self, current_station):
-        # Sorteer buurstations zodat ongebruikte en korte verbindingen prioriteit hebben
+    def prioritize_connections(self, current_station):
+        # Prioriteer langste verbindingen en geef voorkeur aan ongebruikte
         neighbors = self.rail_network.connection_map[current_station]
-        neighbors.sort(key=lambda x: ((current_station, x[0]) not in self.visited_connections, x[1]))
+        neighbors.sort(key=lambda x: (
+            (current_station, x[0]) not in self.visited_connections,  # Ongebruikte verbindingen eerst
+            -x[1],  # Langere verbindingen hebben hogere prioriteit
+            self.station_visit_count[x[0]]  # Minder bezochte stations hebben prioriteit
+        ))
         return neighbors
 
-    def apply_heuristics(self, current_station, trajectory, total_time, max_time, max_visits):
-        # Pas alle heuristieken toe om de volgende logische verbinding te kiezen
-        for neighbor_station, time in self.prioritize_unvisited_and_short_connections(current_station):
-            if self.limit_station_visits(neighbor_station, max_visits) and \
-               self.minimize_overlapping_connections(current_station, neighbor_station) and \
+    def apply_heuristics(self, current_station, trajectory, total_time, max_time):
+        # Pas aangepaste heuristieken toe
+        for neighbor_station, time in self.prioritize_connections(current_station):
+            if self.minimize_overlapping_connections(current_station, neighbor_station) and \
                self.limit_max_time_per_trajectory(total_time + time, max_time):
                 return neighbor_station, time
         return None
@@ -98,14 +103,14 @@ class Heuristics:
         p = unique_visited_connections / total_connections if total_connections > 0 else 0
 
         # Formule voor K-score
-        T = 1
+        T = len(trajectory)
         K = p * 10000 - (T * 100 + total_time)
 
         # Maximaliseer K-score op 10.000
         K = min(K, 10000)
         return K
 
-    def generate_trajectories(self, max_trajectories, max_time, max_visits=2):
+    def generate_trajectories(self, max_trajectories, max_time):
         # Genereer een set van trajecten met heuristieken
         all_trajectories = []
         sorted_stations = sorted(
@@ -128,7 +133,7 @@ class Heuristics:
 
             while True:
                 next_connection = self.apply_heuristics(
-                    current_station, trajectory, total_time, max_time, max_visits
+                    current_station, trajectory, total_time, max_time
                 )
                 if next_connection:
                     neighbor_station, time = next_connection
