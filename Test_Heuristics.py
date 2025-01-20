@@ -1,6 +1,7 @@
 import csv
 from collections import defaultdict
 import random
+from code.visualize import visualize_network, visualize_k_scores, scatterplot
 
 class Station:
     # Klasse om een station te representeren met naam en coördinaten
@@ -80,10 +81,20 @@ class Heuristics:
         neighbors.sort(key=lambda x: (
             (current_station, x[0]) not in self.visited_connections,  # Ongebruikte verbindingen eerst
             -x[1],  # Langere verbindingen hebben hogere prioriteit
-            self.station_visit_count[x[0]]  # Minder bezochte stations hebben prioriteit
+            self.station_visit_count[x[0]],  # Minder bezochte stations hebben prioriteit
+            len(self.rail_network.connection_map[x[0]]) # stations met veel verbindingen krijgen lagere prioriteit
         ))
         return neighbors
 
+    def limit_connections_per_trajectory(self, trajectory, max_connections):
+        """ Avoid that one trajectory gets to much connections"""
+        return len(trajectory) <=  max_connections
+    
+    def maximize_coverage(self, trajectory):
+        """ Check already visited connections to priotize unique connections"""
+        covered_connections = [connection for connection in trajectory if connection in self.visited_connections]
+        return len(covered_connections) < len(self.visited_connections)
+    
     def apply_heuristics(self, current_station, trajectory, total_time, max_time):
         # Pas aangepaste heuristieken toe
         for neighbor_station, time in self.prioritize_connections(current_station):
@@ -177,8 +188,17 @@ if __name__ == "__main__":
     # max_trajectories = 7
     # max_time = 120
 
+
     # Genereer en print de beste trajecten
     best_trajectories = heuristics.generate_trajectories(max_trajectories, max_time)
     print("Top 20 Trajectories with Highest K-Scores:")
+
+    k_scores = [] 
     for i, (trajectory, time, k_score) in enumerate(best_trajectories, 1):
         print(f"Trajectory {i}: {' -> '.join(trajectory)} (Total Time: {time} minutes, K-Score: {k_score:.2f})")
+        k_scores.append(k_score)
+    
+    # Visualize the K-scores
+    visualize_k_scores(k_scores)
+    # Visualize scatterplot scores over time
+    scatterplot(best_trajectories)

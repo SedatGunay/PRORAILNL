@@ -36,7 +36,7 @@ def visualize_network(rail_network, trajectories):
     plt.show()
 
 def visualize_k_scores(k_scores):
-    """Visualiseer de K-scores per iteratie in een histogram met kleine bins."""
+    """Visualize k scores per iteration with a histogram with low bins."""
     plt.figure(figsize=(10, 6))
     
     plt.hist(k_scores, bins=100, color='blue', edgecolor='black', alpha=0.7)
@@ -46,3 +46,31 @@ def visualize_k_scores(k_scores):
     plt.title('Histogram van K-scores')
     
     plt.show()
+
+def scatterplot(trajectories):
+    """ Plot the kscores and times of a trajectory in a scatterplot 
+     - input parameter:  list of trajectories  """
+    
+    # Extract times and scores of trajectories
+    total_times = [time for _, time, _ in trajectories]
+    k_scores = [k_score for _, _, k_score in trajectories]
+
+    # make the scatterplot
+    plt.figure(figsize=(10, 6))
+    plt.scatter(total_times, k_scores, color='dodgerblue', edgecolor='black',s=25)
+
+    # add titels and labels
+    plt.xlabel("Total Time (minutes)", fontsize=10)
+    plt.ylabel("K-Score", fontsize=10)
+    plt.title("K-Scores vs. Total Time of Trajectories", fontsize=12)
+
+    # add grid
+    plt.grid(True, linestyle='--', alpha=0.7)
+
+    # show scatter
+    plt.tight_layout()
+    plt.show()
+
+
+
+
