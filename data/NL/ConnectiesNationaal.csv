@@ -1,0 +1,90 @@
+station1,station2,distance
+Alkmaar,Hoorn,24
+Alkmaar,Den Helder,36
+Almelo,Hengelo,10
+Almere Centrum,Lelystad Centrum,14
+Amsterdam Amstel,Almere Centrum,27
+Amsterdam Amstel,Amsterdam Centraal,8
+Amsterdam Amstel,Amsterdam Zuid,10
+Amsterdam Amstel,Hilversum,28
+Amsterdam Centraal,Almere Centrum,20
+Amsterdam Centraal,Amsterdam Sloterdijk,6
+Amsterdam Sloterdijk,Haarlem,11
+Amsterdam Sloterdijk,Zaandam,6
+Amsterdam Zuid,Schiphol Airport,6
+Amsterdam Zuid,Amsterdam Sloterdijk,16
+Apeldoorn,Amersfoort,24
+Apeldoorn,Zutphen,20
+Arnhem Centraal,Ede-Wageningen,10
+Arnhem Centraal,Dieren,12
+Assen,Zwolle,40
+Beverwijk,Castricum,13
+Breda,Etten-Leur,7
+Breda,Dordrecht,18
+Castricum,Alkmaar,9
+Delft,Den Haag Laan v NOI,12
+Delft,Den Haag Centraal,13
+Delft,Den Haag HS,8
+Den Haag Centraal,Gouda,18
+Den Haag Centraal,Leiden Centraal,12
+Den Haag HS,Gouda,21
+Den Haag HS,Leiden Centraal,12
+Den Haag Laan v NOI,Leiden Centraal,9
+Den Haag Laan v NOI,Gouda,28
+Deventer,Apeldoorn,10
+Deventer,Almelo,24
+Deventer,Zutphen,12
+Dordrecht,Rotterdam Centraal,17
+Dordrecht,Rotterdam Blaak,14
+Eindhoven,Helmond,9
+Eindhoven,s-Hertogenbosch,18
+Eindhoven,Tilburg,21
+Etten-Leur,Roosendaal,11
+Gouda,Alphen a/d Rijn,19
+Groningen,Assen,17
+Haarlem,Beverwijk,16
+Heemstede-Aerdenhout,Haarlem,6
+Heerenveen,Steenwijk,14
+Helmond,Venlo,30
+Hengelo,Enschede,7
+Hilversum,Almere Centrum,26
+Leeuwarden,Heerenveen,16
+Leeuwarden,Groningen,35
+Leiden Centraal,Schiphol Airport,15
+Leiden Centraal,Alphen a/d Rijn,14
+Leiden Centraal,Heemstede-Aerdenhout,13
+Maastricht,Sittard,15
+Nijmegen,Arnhem Centraal,12
+Oss,Nijmegen,16
+Roermond,Weert,14
+Roosendaal,Vlissingen,63
+Roosendaal,Dordrecht,22
+Rotterdam Alexander,Gouda,10
+Rotterdam Blaak,Rotterdam Alexander,9
+Rotterdam Blaak,Schiedam Centrum,11
+Rotterdam Centraal,Rotterdam Alexander,8
+Rotterdam Centraal,Schiedam Centrum,5
+Schiedam Centrum,Delft,7
+Sittard,Heerlen,15
+Sittard,Roermond,15
+Steenwijk,Zwolle,24
+Tilburg,Breda,13
+Utrecht Centraal,Amsterdam Centraal,27
+Utrecht Centraal,Amsterdam Amstel,19
+Utrecht Centraal,Hilversum,15
+Utrecht Centraal,Ede-Wageningen,24
+Utrecht Centraal,Amersfoort,14
+Utrecht Centraal,Gouda,18
+Utrecht Centraal,Alphen a/d Rijn,28
+Utrecht Centraal,Schiphol Airport,33
+Utrecht Centraal,s-Hertogenbosch,27
+Weert,Eindhoven,17
+Zaandam,Hoorn,26
+Zaandam,Castricum,12
+Zaandam,Beverwijk,25
+Zutphen,Dieren,8
+Zwolle,Amersfoort,35
+Zwolle,Deventer,24
+Zwolle,Almelo,42
+s-Hertogenbosch,Oss,11
+s-Hertogenbosch,Tilburg,15
