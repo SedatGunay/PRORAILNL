@@ -132,8 +132,8 @@ class RailNetwork:
 
 
 rail_network = RailNetwork()
-rail_network.load_stations("StationsHolland.csv") 
-rail_network.load_connections("ConnectiesHolland.csv") 
+rail_network.load_stations(r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\StationsNationaal.csv") 
+rail_network.load_connections(r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\ConnectiesNationaal.csv") 
 
 time_limit = 180 
 num_trajectories = 100000 
