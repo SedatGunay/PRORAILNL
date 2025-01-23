@@ -6,7 +6,7 @@ def main():
     # Load data
     stations_file = 'data/NL/StationsNationaal.csv'
     connections_file = 'data/NL/ConnectiesNationaal.csv'
-    trajectories_output_file = 'output/trajectories_output.txt'
+    trajectories_output_file = 'data/trajectories_output.txt'
     
     # Initialize RailNetwork and load data
     rail_network = RailNetwork()
