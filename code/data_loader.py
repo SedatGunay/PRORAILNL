@@ -1,7 +1,6 @@
 import csv
-from greedy import Station, Verbinding  
-
-""" Code om csv bestanden te laden"""
+from classes.station import Station
+from classes.connection import Connection
 
 def load_stations(file_path):
     stations = {}
@@ -22,10 +21,10 @@ def load_connections(file_path, stations):
             station1_name, station2_name, distance = row
             station1 = stations[station1_name]
             station2 = stations[station2_name]
-            verbinding = Verbinding(station1, station2, float(distance))
+            verbinding = Connection(station1, station2, float(distance))
             verbindingen.append(verbinding)
-            station1.add_verbinding(verbinding)
-            station2.add_verbinding(verbinding)
+            station1.add_connection(verbinding)
+            station2.add_connection(verbinding)
     return verbindingen
 
 def load_data(station_file, connection_file):
