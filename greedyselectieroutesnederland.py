@@ -217,7 +217,7 @@ def read_trajectories(file_path):
             trajectories.append((path, duration))
     return trajectories
 
-trajectories_file = "trajectories_output2.txt"
+trajectories_file = "trajectories_output4.txt"
 trajectories = read_trajectories(trajectories_file)
 
 selector = GreedyRouteSelector(connections)
