@@ -1,5 +1,6 @@
 import networkx as nx
 import matplotlib.pyplot as plt
+import random
 
 def visualize_network(rail_network, optimized_trajectories):
     G = nx.Graph()
@@ -19,9 +20,20 @@ def visualize_network(rail_network, optimized_trajectories):
     plt.figure(figsize=(12, 8))
     nx.draw(G, pos, with_labels=True, node_size=300, node_color='lightblue', edge_color='grey', font_size=8)
 
-    # Teken de geoptimaliseerde trajecten
-    for route, duration in optimized_trajectories:
-        nx.draw_networkx_edges(G, pos, edgelist=[(route[i], route[i + 1]) for i in range(len(route) - 1)], edge_color='red', width=2)
+    # Vooraf gedefinieerde kleuren voor de trajecten
+    colors = ['red', 'blue', 'green', 'orange', 'purple', 'cyan', 'magenta', 'yellow']
+    legend_labels = []
+
+    # Teken de geoptimaliseerde trajecten met verschillende kleuren
+    for idx, (route, duration) in enumerate(optimized_trajectories):
+        color = colors[idx % len(colors)]  # Herhaal kleuren als er meer trajecten zijn dan kleuren
+        nx.draw_networkx_edges(G, pos, edgelist=[(route[i], route[i + 1]) for i in range(len(route) - 1)],
+                                 edge_color=color, width=2)
+        legend_labels.append(f'Traject {idx + 1}')  # Voeg label toe voor de legenda
+
+    # Voeg de legenda toe
+    handles = [plt.Line2D([0], [0], color=colors[i % len(colors)], lw=2) for i in range(len(legend_labels))]
+    plt.legend(handles, legend_labels, title="Trajecten", loc='upper left')
 
     plt.title("Rail Network Visualization")
     plt.show()
