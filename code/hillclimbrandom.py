@@ -96,10 +96,29 @@ class RailNetwork:
 
             start_station = random.choice(list(self.stations.keys()))
             new_route, new_time = self.generate_random_route(start_station)
-            
+
             trajectories_copy[index_to_replace] = (new_route, new_time)
 
         return trajectories_copy
+    
+    def hill_climber_optimization(self, num_iterations):
+        """
+        Hill climber optimization algorithm to find the best set of trajectories
+        """
+        best_routes = self.generate_random_trajectory()
+        best_K_score = self.calculate_K_score(best_routes)
+
+        for iteration in range(num_iterations):
+            updated_trajectory = self.swap_routes(best_routes)
+            updated_K_score = self.calculate_K_score(updated_trajectory)
+
+            if updated_K_score > best_K_score:
+                best_routes = updated_trajectory
+                best_K_score = updated_K_score
+
+                print(f"Iteration: {iteration}, K-Score: {best_K_score}")
+
+        return best_routes, best_K_score
     
     def calculate_K_score(self, trajectories):
         """
@@ -124,11 +143,15 @@ class RailNetwork:
 
         return K_score
 
-# Example usage
 def main():
     rail_network = RailNetwork(max_time_limit=180)
-    rail_network.load_stations("StationsHolland.csv")
-    rail_network.load_connections("ConnectiesHolland.csv")
+    rail_network.load_stations(r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\StationsNationaal.csv")
+    rail_network.load_connections(r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\ConnectiesNationaal.csv")
+
+    best_traject, highest_K = rail_network.hill_climber_optimization(num_iterations=100000)
+    
+    print("Highest K-Score:", highest_K)
+    print("Number of Routes used:", len(best_traject))
 
 if __name__ == "__main__":
     main()
