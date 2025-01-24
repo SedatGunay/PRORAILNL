@@ -71,16 +71,15 @@ class RailNetwork:
         end_station = self.stations[end_station_key]
 
         routes = []
-        self.depth_first_search(
-            start_station, end_station, {start_station}, [start_station], 0, time_limit, routes
-        )
+        self.depth_first_search(start_station, end_station, {start_station}, [start_station], 0, time_limit, routes)
         return routes
     
 def main():
     rail_network = RailNetwork(max_time_limit=180)
     rail_network.load_stations(r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\StationsNationaal.csv")
     rail_network.load_connections(r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\ConnectiesNationaal.csv")
-
+    
+    # Test
     start_station = "Amsterdam Centraal"
     end_station = "Rotterdam Centraal"
 
