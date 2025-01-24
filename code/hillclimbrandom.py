@@ -67,6 +67,40 @@ class RailNetwork:
 
         return route, time_route
 
+    def generate_random_trajectory(self):
+        """
+        Generate a random set of a random amount of routes
+        """
+        num_routes = random.randint(1, 20)
+        routes = []
+
+        for route_n in range(num_routes):
+            start_station = random.choice(list(self.stations.keys()))
+            route, total_time = self.generate_random_route(start_station)
+            routes.append((route, total_time))
+
+        return routes
+    
+    def swap_routes(self, trajectories):
+        """
+        Change a random amount of routes in a list of trajectories
+        """
+        
+        trajectories_copy = copy.deepcopy(trajectories)
+        
+        # Randomly select num routes to replace but limit to half of the total routes
+        num_replace = random.randint(1, len(trajectories_copy) // 2)
+        
+        for routes in range(num_replace):
+            index_to_replace = random.randint(0, len(trajectories_copy) - 1)
+
+            start_station = random.choice(list(self.stations.keys()))
+            new_route, new_time = self.generate_random_route(start_station)
+            
+            trajectories_copy[index_to_replace] = (new_route, new_time)
+
+        return trajectories_copy
+    
     def calculate_K_score(self, trajectories):
         """
         Calculate the K-score for a list of trajectories
