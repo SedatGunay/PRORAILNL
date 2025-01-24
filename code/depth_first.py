@@ -62,11 +62,32 @@ class RailNetwork:
             visited_stations.remove(next_station)
             current_route.pop()
 
+    def find_routes(self, start_station_key, end_station_key, time_limit):
+        """
+        Find routes between two stations within a time limit.
+        """
+        
+        start_station = self.stations[start_station_key]
+        end_station = self.stations[end_station_key]
 
+        routes = []
+        self.depth_first_search(
+            start_station, end_station, {start_station}, [start_station], 0, time_limit, routes
+        )
+        return routes
+    
 def main():
     rail_network = RailNetwork(max_time_limit=180)
-    rail_network.load_stations("StationsHolland.csv")
-    rail_network.load_connections("ConnectiesHolland.csv")
+    rail_network.load_stations(r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\StationsNationaal.csv")
+    rail_network.load_connections(r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\ConnectiesNationaal.csv")
+
+    start_station = "Amsterdam Centraal"
+    end_station = "Rotterdam Centraal"
+
+    time_limit = 180
+
+    routes = rail_network.find_routes(start_station, end_station, time_limit)
+    print(len(routes))
 
 if __name__ == "__main__":
     main()
