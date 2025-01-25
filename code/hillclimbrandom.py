@@ -2,6 +2,7 @@ import copy
 import random
 import csv
 from collections import defaultdict
+import matplotlib.pyplot as plt
 
 class Station:
     def __init__(self, name, x, y):
@@ -107,10 +108,13 @@ class RailNetwork:
         """
         best_routes = self.generate_random_trajectory(num_routes)
         best_K_score = self.calculate_K_score(best_routes)
+        k_score_list = [best_K_score]
 
         for iteration in range(num_iterations):
             updated_trajectory = self.swap_routes(best_routes)
             updated_K_score = self.calculate_K_score(updated_trajectory)
+
+            k_score_list.append(updated_K_score)
 
             if updated_K_score > best_K_score:
                 best_routes = updated_trajectory
@@ -118,7 +122,7 @@ class RailNetwork:
 
                 print(f"Iteration: {iteration}, K-Score: {best_K_score}")
 
-        return best_routes, best_K_score
+        return best_routes, best_K_score, k_score_list
     
     def calculate_K_score(self, trajectories):
         """
@@ -148,10 +152,19 @@ def main():
     rail_network.load_stations(r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\StationsNationaal.csv")
     rail_network.load_connections(r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\ConnectiesNationaal.csv")
 
-    best_traject, highest_K = rail_network.hill_climber_optimization(num_iterations=100000, num_routes=10)
+    best_traject, highest_K, k_score_list = rail_network.hill_climber_optimization(num_iterations=10000, num_routes=10)
     
     print("Highest K-Score:", highest_K)
     print("Number of Routes used:", len(best_traject))
+
+    plt.hist(k_score_list,edgecolor='black', bins=20)
+
+    plt.title("K-Score Distribution")
+    plt.xlabel("K-Score")
+    plt.ylabel("Frequency")
+    plt.grid(True)
+
+    plt.show()
 
 if __name__ == "__main__":
     main()

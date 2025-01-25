@@ -2,6 +2,7 @@ import copy
 import random
 import csv
 from collections import defaultdict
+import matplotlib.pyplot as plt
 
 class Station:
     def __init__(self, name, x, y):
@@ -114,9 +115,10 @@ class RailNetwork:
         """
 
 
-        k_score_list = []
+        
         current_trajectory = initial_trajectories
         best_K_score = self.calculate_K_score(current_trajectory)
+        k_score_list = [best_K_score]
 
         for iteration in range(num_iterations):
             new_solution = copy.deepcopy(current_trajectory)
@@ -187,10 +189,19 @@ def main():
     rail_network.load_connections(r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\ConnectiesNationaal.csv")
 
     initial_trajectories = rail_network.generate_initial_trajectories(num_trajectories=12)
-    best_trajectory, best_K_score, k_score_list = rail_network.hill_climber_depth_first(num_iterations=100, initial_trajectories=initial_trajectories)
+    best_trajectory, best_K_score, k_score_list = rail_network.hill_climber_depth_first(num_iterations=100000, initial_trajectories=initial_trajectories)
     
     print("Highest K-Score:", best_K_score)
     print("Number of Routes used:", len(best_trajectory))
+
+    plt.hist(k_score_list,edgecolor='black', bins=20)
+
+    plt.title("K-Score Distribution")
+    plt.xlabel("K-Score")
+    plt.ylabel("Frequency")
+    plt.grid(True)
+
+    plt.show()
 
 if __name__ == "__main__":
     main()
