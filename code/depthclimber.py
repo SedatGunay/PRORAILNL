@@ -204,8 +204,6 @@ def main():
 
     print("Highest K-Score:", real_highst_k)
     print("Number of Routes used:", len(real_best_traject))
-    print("Highest K-Score:", best_K_score)
-    print("Number of Routes used:", len(best_trajectory))
 
     plt.hist(k_score_list,edgecolor='black', bins=20)
 
