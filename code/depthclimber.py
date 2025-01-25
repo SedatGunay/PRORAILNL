@@ -113,6 +113,8 @@ class RailNetwork:
         Hill climbing optimization using random chosen depth-first search routes
         """
 
+
+        k_score_list = []
         current_trajectory = initial_trajectories
         best_K_score = self.calculate_K_score(current_trajectory)
 
@@ -146,13 +148,15 @@ class RailNetwork:
                 new_solution[index_to_replace] = (new_route, time_new_route)
                 new_score = self.calculate_K_score(new_solution)
                 
+                k_score_list.append(new_score)
+                
                 # Check if new solution is better
                 if new_score > best_K_score:
                     current_trajectory = new_solution
                     best_K_score = new_score
                     print(f"Iteration {iteration}: Improved K-score to {best_K_score}")
 
-        return current_trajectory, best_K_score
+        return current_trajectory, best_K_score, k_score_list
 
     def calculate_K_score(self, trajectories):
         """
@@ -183,7 +187,7 @@ def main():
     rail_network.load_connections(r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\ConnectiesNationaal.csv")
 
     initial_trajectories = rail_network.generate_initial_trajectories(num_trajectories=12)
-    best_trajectory, best_K_score = rail_network.hill_climber_depth_first(num_iterations=10000, initial_trajectories=initial_trajectories)
+    best_trajectory, best_K_score, k_score_list = rail_network.hill_climber_depth_first(num_iterations=100, initial_trajectories=initial_trajectories)
     
     print("Highest K-Score:", best_K_score)
     print("Number of Routes used:", len(best_trajectory))
