@@ -187,10 +187,23 @@ def main():
     rail_network = RailNetwork(max_time_limit=180)
     rail_network.load_stations(r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\StationsNationaal.csv")
     rail_network.load_connections(r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\ConnectiesNationaal.csv")
-
-    initial_trajectories = rail_network.generate_initial_trajectories(num_trajectories=12)
-    best_trajectory, best_K_score, k_score_list = rail_network.hill_climber_depth_first(num_iterations=100000, initial_trajectories=initial_trajectories)
     
+    # Setup for the experiment
+    full_k_scores = []
+    real_highst_k = 0
+    real_best_traject = None
+
+    for i in range(2, 21):
+        initial_trajectories = rail_network.generate_initial_trajectories(num_trajectories=i)
+        best_trajectory, best_K_score, k_score_list = rail_network.hill_climber_depth_first(num_iterations=1000, initial_trajectories=initial_trajectories)
+        if best_K_score > real_highst_k:
+            real_highst_k = best_K_score
+            real_best_traject = best_trajectory
+
+        full_k_scores += k_score_list
+
+    print("Highest K-Score:", real_highst_k)
+    print("Number of Routes used:", len(real_best_traject))
     print("Highest K-Score:", best_K_score)
     print("Number of Routes used:", len(best_trajectory))
 
