@@ -7,8 +7,7 @@ class DepthFirstRailNetwork(RailNetwork):
         """
         Extends RailNetwork to include a maximum time limit for route searches.
         """
-        super().__init__()
-        self.max_time_limit = max_time_limit
+        super().__init__(max_time_limit)
 
     def depth_first_search(self, current_station, end_station, visited_stations, current_route, current_time, routes):
         """
@@ -49,13 +48,13 @@ class DepthFirstRailNetwork(RailNetwork):
         end_station = self.stations[end_station_key]
 
         routes = []
-        self.depth_first_search(start_station, end_station, {start_station}, [start_station], 0, time_limit, routes)
+        self.depth_first_search(start_station, end_station, {start_station}, [start_station], 0,routes)
         return routes
-
+    
 def main():
-    rail_network = RailNetwork(max_time_limit=180)
-    rail_network.load_stations(r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\StationsNationaal.csv")
-    rail_network.load_connections(r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\ConnectiesNationaal.csv")
+    rail_network = DepthFirstRailNetwork(max_time_limit=180)
+    rail_network.load_stations(r"/Users/sedatgunay/Documents/GitHub/PRORAILNL/data/NL/StationsNationaal.csv")
+    rail_network.load_connections(r"/Users/sedatgunay/Documents/GitHub/PRORAILNL/data/NL/ConnectiesNationaal.csv")
     
     # Test
     start_station = "Amsterdam Centraal"
@@ -65,6 +64,7 @@ def main():
 
     routes = rail_network.find_routes(start_station, end_station, time_limit)
     print(len(routes))
+
 
 if __name__ == "__main__":
     main()
@@ -78,12 +78,14 @@ if __name__ == "__main__":
 # from collections import defaultdict
 
 # class Station:
+
 #     def __init__(self, name, x, y):
 #         self.name = name
 #         self.x = x
 #         self.y = y
 
 # class RailNetwork:
+
 #     def __init__(self, max_time_limit):
 #         self.stations = {}
 #         self.connections = []
@@ -147,12 +149,14 @@ if __name__ == "__main__":
 #         routes = []
 #         self.depth_first_search(start_station, end_station, {start_station}, [start_station], 0, time_limit, routes)
 #         return routes
-    
+
 # def main():
+
 #     rail_network = RailNetwork(max_time_limit=180)
-#     rail_network.load_stations(r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\StationsNationaal.csv")
-#     rail_network.load_connections(r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\ConnectiesNationaal.csv")
-    
+#     # rail_network.load_stations(r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\StationsNationaal.csv")
+#     # rail_network.load_connections(r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\ConnectiesNationaal.csv")
+#     rail_network.load_stations(r"/Users/sedatgunay/Documents/GitHub/PRORAILNL/data/NL/StationsNationaal.csv")
+#     rail_network.load_connections(r"/Users/sedatgunay/Documents/GitHub/PRORAILNL/data/NL/ConnectiesNationaal.csv")
 #     # Test
 #     start_station = "Amsterdam Centraal"
 #     end_station = "Rotterdam Centraal"

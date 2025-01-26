@@ -7,8 +7,9 @@ import matplotlib.pyplot as plt
 from classes.station import Station
 from classes.connection import Connection
 from classes.rail_network import RailNetwork
+from depth_first import DepthFirstRailNetwork
 
-class DepthClimberRailNetwork(RailNetwork):
+class DepthClimberRailNetwork(DepthFirstRailNetwork):
     def __init__(self, max_time_limit):
         super().__init__(max_time_limit)
 
@@ -113,12 +114,9 @@ class DepthClimberRailNetwork(RailNetwork):
     
 def main():
     rail_network = DepthClimberRailNetwork(max_time_limit=180)
-    # station_file = r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\StationsNationaal.csv"
-    station_file = r"/Users/sedatgunay/Documents/GitHub/PRORAILNL/data/NL/StationsNationaal.csv"
-    # connection_file= r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\ConnectiesNationaal.csv"
-    connection_file= r"/Users/sedatgunay/Documents/GitHub/PRORAILNL/data/NL/ConnectiesNationaal.csv"
-    rail_network.load_data(station_file, connection_file)
-
+    rail_network.load_stations(r"/Users/sedatgunay/Documents/GitHub/PRORAILNL/data/NL/StationsNationaal.csv")
+    rail_network.load_connections(r"/Users/sedatgunay/Documents/GitHub/PRORAILNL/data/NL/ConnectiesNationaal.csv")
+    
     # Setup for the experiment
     full_k_scores = []
     real_highst_k = 0
@@ -136,7 +134,7 @@ def main():
     print("Highest K-Score:", real_highst_k)
     print("Number of Routes used:", len(real_best_traject))
 
-    plt.hist(k_score_list, edgecolor='black', bins=20)
+    plt.hist(full_k_scores, edgecolor='black', bins=20)
 
     plt.title("K-Score Distribution")
     plt.xlabel("K-Score")
@@ -147,8 +145,7 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
+    
 # import copy
 # import random
 # import csv
