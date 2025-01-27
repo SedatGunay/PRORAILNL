@@ -42,6 +42,9 @@ class DepthFirstRailNetwork(RailNetwork):
         """
         Finds all routes between two stations within the max time limit.
         """
+        if start_station_key not in self.stations or end_station_key not in self.stations:
+            raise ValueError("Sttarting station or end station not in stations.")
+        
         time_limit = time_limit if time_limit is not None else self.max_time_limit
 
         start_station = self.stations[start_station_key]

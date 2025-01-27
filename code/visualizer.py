@@ -86,3 +86,22 @@ def visualize_network_on_map(rail_network, optimized_trajectories):
     ax.legend(loc="upper right")
 
     plt.show()
+
+# visualizer.py
+import matplotlib.pyplot as plt
+
+def plot_k_scores(k_score_list):
+    """
+    Plot the progression of K-scores over iterations.
+    
+    Parameter:
+        k_score_list (list): List of K-scores to plot.
+    """
+    plt.figure(figsize=(10, 6))
+    plt.plot(range(len(k_score_list)), k_score_list, label="K-Score over Iterations", color="blue")
+    plt.title("K-Score Progression")
+    plt.xlabel("Iteration")
+    plt.ylabel("K-Score")
+    plt.grid(True)
+    plt.legend()
+    plt.show()
