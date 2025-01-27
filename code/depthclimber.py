@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from classes.station import Station
 from classes.connection import Connection
 from classes.rail_network import RailNetwork
-from code.algorithms.depth_first import DepthFirstRailNetwork
+from depth_first import DepthFirstRailNetwork
 
 class DepthClimberRailNetwork(DepthFirstRailNetwork):
     def __init__(self, max_time_limit):

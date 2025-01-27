@@ -2,9 +2,9 @@ from classes.rail_network import RailNetwork
 from algorithms.route_gen import find_trajectories, save_trajectories_to_file
 from algorithms.greedy_selector import GreedyRouteSelector
 from visualizer import visualize_network, visualize_network_on_map
-from algorithms.depthclimber import DepthClimberRailNetwork
-from algorithms.depth_first import DepthFirstRailNetwork
-from algorithms.hillclimbrandom import HillClimberRailNetwork
+from depthclimber import DepthClimberRailNetwork
+from depth_first import DepthFirstRailNetwork
+from hillclimbrandom import HillClimberRailNetwork
 
 def main():
     # Load data
