@@ -1,6 +1,9 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 import random
+import geopandas as gpd
+from shapely.geometry import Point, LineString
+import contextily as ctx
 
 def visualize_network(rail_network, optimized_trajectories):
     G = nx.Graph()
@@ -36,4 +39,50 @@ def visualize_network(rail_network, optimized_trajectories):
     plt.legend(handles, legend_labels, title="Trajecten", loc='upper left')
 
     plt.title("Rail Network Visualization")
+    plt.show()
+
+def visualize_network_on_map(rail_network, optimized_trajectories):
+    # Zet stations om naar een GeoDataFrame en laat het traject op de map van NL zien
+    station_geometries = [Point(station.x, station.y) for station in rail_network.stations.values()]
+    station_names = [station.name for station in rail_network.stations.values()]
+    stations_gdf = gpd.GeoDataFrame({"station": station_names}, geometry=station_geometries, crs="EPSG:4326")
+
+    # Zet verbindingen om naar een GeoDataFrame
+    connection_geometries = [
+        LineString([(conn.station1.x, conn.station1.y), (conn.station2.x, conn.station2.y)])
+        for conn in rail_network.connections
+    ]
+    connections_gdf = gpd.GeoDataFrame(geometry=connection_geometries, crs="EPSG:4326")
+
+    # Zet trajecten om naar een GeoDataFrame
+    trajectory_geometries = []
+    for route, _ in optimized_trajectories:
+        points = [(rail_network.stations[station].x, rail_network.stations[station].y) for station in route]
+        trajectory_geometries.append(LineString(points))
+
+    trajectories_gdf = gpd.GeoDataFrame(geometry=trajectory_geometries, crs="EPSG:4326")
+
+    # Maak een plot
+    fig, ax = plt.subplots(figsize=(12, 10))
+
+    # Voeg de verbindingen toe
+    connections_gdf.plot(ax=ax, color="grey", linewidth=0.5, alpha=0.7, label="Connections")
+
+    # Voeg de stations toe
+    stations_gdf.plot(ax=ax, color="blue", markersize=10, label="Stations")
+
+    # Voeg trajecten toe met verschillende kleuren
+    colors = ['red', 'blue', 'green', 'orange', 'purple', 'cyan', 'magenta', 'yellow']
+    for idx, trajectory in enumerate(trajectories_gdf.geometry):
+        trajectories_gdf.iloc[[idx]].plot(ax=ax, color=colors[idx % len(colors)], linewidth=2, label=f"Traject {idx + 1}")
+
+    # Voeg een basemap toe
+    ctx.add_basemap(ax, source=ctx.providers.OpenStreetMap.Mapnik, crs="EPSG:4326")
+
+    # Pas layout aan
+    ax.set_title("Rail Network and Trajectories on Map of the Netherlands", fontsize=14)
+    ax.set_xlabel("Longitude", fontsize=12)
+    ax.set_ylabel("Latitude", fontsize=12)
+    ax.legend(loc="upper right")
+
     plt.show()
