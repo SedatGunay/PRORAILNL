@@ -15,7 +15,7 @@ class RailNetwork:
             reader = csv.DictReader(file)
             for row in reader:
                 self.stations[row['station']] = Station(row['station'], float(row['x']), float(row['y']))
-
+    
     def load_connections(self, filepath):
         with open(filepath, 'r') as file:
             reader = csv.DictReader(file)

@@ -1,10 +1,8 @@
 from classes.rail_network import RailNetwork
-from algorithms.route_gen import find_trajectories, save_trajectories_to_file
-from code.greedy_selector import GreedyRouteSelector
-from visualizer import visualize_network, visualize_network_on_map
-from depthclimber import DepthClimberRailNetwork
-from depth_first import DepthFirstRailNetwork
-from hillclimbrandom import HillClimberRailNetwork
+from algorithms.route_gen import find_trajectories
+from visualizer import visualize_network_on_map
+from greedy_selector import GreedyRouteSelector
+from utils.scoring import calculate_K_score
 
 def main():
     # Load data
@@ -33,8 +31,11 @@ def main():
     # Optimize trajectories using GreedyRouteSelector
     selector = GreedyRouteSelector(rail_network.connections)
     optimized_trajectories = selector.greedy_optimization(trajectories)
-    k_score = selector.calculate_K_score(optimized_trajectories)
-    
+
+    # Calculate K-score
+    k_score = calculate_K_score(optimized_trajectories, rail_network.connections)
+
+    # Print results
     i = 1
     print("Optimized Trajectories:")
     for route, duration in optimized_trajectories:
@@ -47,4 +48,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

@@ -2,18 +2,6 @@ class GreedyRouteSelector:
     def __init__(self, connections):
         self.connections = connections
 
-    def calculate_K_score(self, trajectories):
-        unique_used_connections = set()
-        for trajectory, _ in trajectories:
-            for i in range(len(trajectory) - 1):
-                unique_used_connections.add(tuple(sorted((trajectory[i], trajectory[i + 1]))))
-        total_connections = len(self.connections)
-
-        p = len(unique_used_connections) / total_connections
-        T = len(trajectories)
-        Min = sum(total_time for _, total_time in trajectories)
-        return p * 10000 - (T * 100 + Min)
-
     def greedy_optimization(self, trajectories, max_routes=20, max_time=180, first_path_index=0):
         selected_routes = []
         unique_used_connections = set()
@@ -45,3 +33,5 @@ class GreedyRouteSelector:
                 total_time_used += data["duration"]
 
         return selected_routes
+    
+
