@@ -17,7 +17,29 @@ conda install --file requirements.txt
 ```
 
 ## Gebruik 
-....
+
+Om het script uit te voeren, start het hoofdscript main.py om het programma te draaien:
+
+```
+python main.py
+```
+
+Tijdens de uitvoering kunt u kiezen uit de datasets voor Noord- en Zuid-Holland of heel Nederland.
+
+## Experimenten
+
+Het aanpassen van parameters in de code is mogelijk om verschillende distributies van scores te analyseren en zo de beste oplossing te kiezen.
+
+Pas hiervoor de parameters aan in de code van de algoritmen en sla deze resultaten op in CSV-formaat.
+
+Run hierna het visualisatiescript 
+```
+visualizer.py
+``` 
+om grafieken te genereren.
+
+
+
 
 
 ## Auteurs 
