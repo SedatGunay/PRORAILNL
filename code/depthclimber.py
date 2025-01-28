@@ -51,6 +51,7 @@ class DepthClimberRailNetwork(DepthFirstRailNetwork):
         """
         Hill climbing optimization using random chosen depth-first search routes
         """
+        trajectory_list = []
         current_trajectory = initial_trajectories
         best_K_score = calculate_K_score(current_trajectory, self.connections)
         k_score_list = [best_K_score]
@@ -72,6 +73,7 @@ class DepthClimberRailNetwork(DepthFirstRailNetwork):
                 # Update trajectory and recalculate K-score
                 new_solution[index_to_replace] = (new_route, time_new_route)
                 new_score = calculate_K_score(new_solution, self.connections)
+                trajectory_list.append([list(station.name for station in route) for route, _ in new_solution])
                 
                 k_score_list.append(new_score)
                 
@@ -81,4 +83,4 @@ class DepthClimberRailNetwork(DepthFirstRailNetwork):
                     best_K_score = new_score
                     print(f"Iteration {iteration}: Improved K-score to {best_K_score}")
 
-        return current_trajectory, best_K_score, k_score_list
+        return current_trajectory, best_K_score, k_score_list,trajectory_list

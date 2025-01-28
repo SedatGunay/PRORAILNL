@@ -71,6 +71,7 @@ class HillClimberRailNetwork(RailNetwork):
         """
         Hill climber optimization algorithm to find the best set of trajectories.
         """
+        trajectory_list = []
         best_routes = self.generate_random_trajectory(num_routes)
         best_K_score = calculate_K_score(best_routes, self.connections)
         k_score_list = [best_K_score]
@@ -78,6 +79,8 @@ class HillClimberRailNetwork(RailNetwork):
         for iteration in range(num_iterations):
             updated_trajectory = self.swap_routes(best_routes)
             updated_K_score = calculate_K_score(updated_trajectory, self.connections)
+
+            trajectory_list.append([list(station.name for station in route) for route, _ in updated_trajectory])
 
             k_score_list.append(updated_K_score)
 
@@ -87,4 +90,4 @@ class HillClimberRailNetwork(RailNetwork):
 
                 print(f"Iteration: {iteration}, K-Score: {best_K_score}")
 
-        return best_routes, best_K_score, k_score_list
+        return best_routes, best_K_score, k_score_list, trajectory_list
