@@ -25,3 +25,4 @@ def calculate_K_score(trajectories, connections):
     K_score = p * 10000 - (num_trajectories * 100 + total_time)
 
     return K_score
+
