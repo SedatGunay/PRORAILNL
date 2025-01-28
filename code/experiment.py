@@ -2,7 +2,7 @@ from classes.rail_network import RailNetwork
 from greedy_selector import GreedyRouteSelector
 from utils.helper import find_trajectories
 from utils.scoring import calculate_K_score
-from visualizer import visualize_network_on_map, plot_k_score_distribution
+from visualizer import visualize_network_on_map, plot_k_score_distribution, plot_scores_from_csv
 from depthclimber import DepthClimberRailNetwork
 import csv
 from random_baseline import Baseline
@@ -13,9 +13,10 @@ def run_hill_climber_random():
     Runs the Hill Climber Random algorithm and saves the results to a CSV file.
     """
     rail_network = HillClimberRailNetwork(max_time_limit=180)
-    rail_network.load_stations(r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\StationsNationaal.csv")
-    rail_network.load_connections(r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\ConnectiesNationaal.csv")
-
+    # rail_network.load_stations(r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\StationsNationaal.csv")
+    # rail_network.load_connections(r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\ConnectiesNationaal.csv")
+    rail_network.load_stations("data/NL/StationsNationaal.csv")
+    rail_network.load_connections("data/NL/ConnectiesNationaal.csv")
     full_k_scores = []
     real_highst_k = 0
     real_best_traject = None
@@ -24,8 +25,8 @@ def run_hill_climber_random():
         writer = csv.writer(file)
         writer.writerow(["K-score", "Trajectory"])
         
-        for i in range(2, 21):
-            best_traject, highest_K, k_score_list, trajectory_list = rail_network.hill_climber_optimization(num_iterations=10, num_routes=i)
+        for i in range(8, 21):
+            best_traject, highest_K, k_score_list, trajectory_list = rail_network.hill_climber_optimization(num_iterations=20000, num_routes=i)
             
             # Write each K-score and its corresponding trajectory to the CSV file
             for k_score, trajectory in zip(k_score_list, trajectory_list):
@@ -79,7 +80,8 @@ def run_depth_climber(stations_file, connections_file):
     real_highst_k = 0
     real_best_traject = None
 
-    with open('depthclimberdata.csv', mode='w', newline='') as file:
+    csv_output_file = 'data/nz-holland/depthclimberdataNZ.csv'
+    with open(csv_output_file, mode='w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(['K-Score', 'Trajectory'])
             
@@ -100,7 +102,9 @@ def run_depth_climber(stations_file, connections_file):
 
     print("Highest K-Score:", real_highst_k)
     print("Number of Routes used:", len(real_best_traject))
-    plot_k_score_distribution(full_k_scores)
+
+    # Plot scores from saved CSV file
+    plot_scores_from_csv(csv_output_file)
 
 def run_random_baseline():
     """

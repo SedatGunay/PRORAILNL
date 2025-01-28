@@ -4,6 +4,7 @@ import random
 import geopandas as gpd
 from shapely.geometry import Point, LineString
 import contextily as ctx
+import pandas as pd
 
 def visualize_network(rail_network, optimized_trajectories):
     G = nx.Graph()
@@ -119,3 +120,41 @@ def plot_k_score_distribution(k_scores):
     plt.grid(True)
 
     plt.show()
+
+def plot_scores_from_csv(csv_file_path):
+    """
+    Reads K-scores from a CSV file and plots the distribution.
+
+    Parameters:
+        csv_file_path (str): Path to the CSV file containing 'K-Score' column.
+
+    Returns:
+        None
+    """
+    try:
+        # Load the CSV file
+        data = pd.read_csv(csv_file_path)
+
+        # Ensure 'K-Score' column exists
+        if 'K-Score' not in data.columns:
+            print(f"Error: 'K-Score' column not found in {csv_file_path}.")
+            return
+
+        # Extract K-scores
+        k_scores = data['K-Score']
+
+        # Plot the distribution
+        plt.figure(figsize=(10, 6))
+        plt.hist(k_scores, bins=20, edgecolor='black', alpha=0.75)
+        plt.title("K-Score Distribution")
+        plt.xlabel("K-Score")
+        plt.ylabel("Frequency")
+        plt.grid(True)
+        plt.show()
+
+    except Exception as e:
+        print(f"Error while plotting scores from {csv_file_path}: {e}")
+
+
+#test 
+plot_scores_from_csv("/Users/sedatgunay/Documents/GitHub/PRORAILNL/data/NZ-Holland/depthclimberdataNZ.csv")
