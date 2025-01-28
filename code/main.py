@@ -1,7 +1,7 @@
 from classes.rail_network import RailNetwork
 from algorithms.route_gen import find_trajectories, save_trajectories_to_file
 from greedy_selector import GreedyRouteSelector
-from visualizer import visualize_network, visualize_network_on_map
+from visualizer import visualize_network, visualize_network_on_map, plot_k_score_distribution
 from depthclimber import DepthClimberRailNetwork
 from depth_first import DepthFirstRailNetwork
 from hillclimbrandom import HillClimberRailNetwork
@@ -47,15 +47,24 @@ def run_depth_climber_test():
     rail_network.load_stations('data/NL/StationsNationaal.csv')
     rail_network.load_connections('data/NL/ConnectiesNationaal.csv')
 
-    initial_trajectories = rail_network.generate_initial_trajectories(num_trajectories=5)
+    full_k_scores = []
+    real_highst_k = 0
+    real_best_traject = None
 
-    best_trajectories, highest_k_score, k_score_list = rail_network.hill_climber_depth_first(
-        num_iterations=10000, initial_trajectories=initial_trajectories)
+    for i in range(2, 21):
+        initial_trajectories = rail_network.generate_initial_trajectories(num_trajectories=i)
+        best_trajectory, best_K_score, k_score_list = rail_network.hill_climber_depth_first(num_iterations=1000, initial_trajectories=initial_trajectories)
+        if best_K_score > real_highst_k:
+            real_highst_k = best_K_score
+            real_best_traject = best_trajectory
 
-    print(f"Best K-score: {highest_k_score}")
-    print(f"Aantal routes gebruikt: {len(best_trajectories)}")
+        full_k_scores += k_score_list
 
-    visualize_network_on_map(rail_network, best_trajectories)
+    print("Highest K-Score:", real_highst_k)
+    print("Number of Routes used:", len(real_best_traject))
+
+    plot_k_score_distribution(full_k_scores)
+
 
 def run_hill_climber_test():
     print("Running Hill Climber Optimization...")
@@ -81,7 +90,7 @@ def run_hill_climber_test():
     print("Hill Climber Highest K-Score:", highest_k_score_overall)
     print("Number of Routes used:", len(best_trajectories_overall))
     
-    visualize_network_on_map(rail_network, best_trajectories_overall)
+    plot_k_score_distribution(full_k_scores)
 
 def main():
     # Run each test function
