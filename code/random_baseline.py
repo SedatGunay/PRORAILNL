@@ -5,7 +5,7 @@ from collections import defaultdict
 from classes.rail_network import RailNetwork
 from utils.scoring import calculate_K_score
 
-class Random(RailNetwork):
+class Baseline(RailNetwork):
     def __init__(self, max_time_limit=None):
         """
         Extends RailNetwork to include a maximum time limit for route searches.

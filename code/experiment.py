@@ -7,29 +7,20 @@ from depthclimber import DepthClimberRailNetwork
 import csv
 from random_baseline import Baseline
 
-def main():
-    # Load data
-    stations_file = 'data/NL/StationsNationaal.csv'
-    connections_file = 'data/NL/ConnectiesNationaal.csv'
-
-    # Initialize RailNetwork and load data
-    rail_network = RailNetwork(180)
-    rail_network.load_stations(stations_file)
-    rail_network.load_connections(connections_file)
-    
-    # Generate possible trajectories 
+def run_greedy(rail_network, stations_file, connections_file):
+     # Generate possible trajectories 
     max_duration = 180
     max_stations = 100
     max_reuse = 1
     trajectories = find_trajectories(rail_network, max_duration, max_stations, max_reuse)
-
-    """ --- Greedy Algorithm ---"""
+     
+    # Greedy Algorithm
     greedy = GreedyRouteSelector(rail_network.connections)
     optimized_trajectory_greedy = greedy.greedy_optimization(trajectories)
 
     # Calculate k score 
     k_score_greedy = calculate_K_score(optimized_trajectory_greedy, rail_network.connections)
-    print(f"The K-score for Greedy optimazation is: {k_score_greedy}")
+    print(f"The K-score for Greedy optimization is: {k_score_greedy}")
 
     # Print optimized trajectories 
     print("The optimized trajectories are:")
@@ -42,6 +33,7 @@ def main():
     # Visualize the final greedy network 
     visualize_network_on_map(rail_network, optimized_trajectory_greedy)
 
+def run_depth_climber(stations_file, connections_file):
     """--- Depth Climber ---"""
     depth_network = DepthClimberRailNetwork(max_time_limit=180)
     depth_network.load_stations(stations_file)
@@ -74,6 +66,7 @@ def main():
     print("Number of Routes used:", len(real_best_traject))
     plot_k_score_distribution(full_k_scores)
 
+def run_random_baseline():
     """--- Random ---"""
     random_network = Baseline(180)
     random_network.load_stations("/Users/sedatgunay/Documents/GitHub/PRORAILNL/data/NL/StationsNationaal.csv")
@@ -87,6 +80,37 @@ def main():
 
     # Plot the distribution of K-scores
     plot_k_score_distribution(K_scores)
+
+def main():
+    # Load data
+    stations_file = 'data/NL/StationsNationaal.csv'
+    connections_file = 'data/NL/ConnectiesNationaal.csv'
+
+    # Initialize RailNetwork and load data
+    rail_network = RailNetwork(180)
+    rail_network.load_stations(stations_file)
+    rail_network.load_connections(connections_file)
+
+    # Menu for user selection
+    print("Choose which algorithm to run:")
+    print("1. Greedy Algorithm")
+    print("2. Depth Climber Algorithm")
+    print("3. Random Baseline")
+    print("4. Run All")
+    choice = input("Enter your choice (1/2/3/4): ")
+
+    if choice == "1":
+        run_greedy(rail_network, stations_file, connections_file)
+    elif choice == "2":
+        run_depth_climber(stations_file, connections_file)
+    elif choice == "3":
+        run_random_baseline()
+    elif choice == "4":
+        run_greedy(rail_network, stations_file, connections_file)
+        run_depth_climber(stations_file, connections_file)
+        run_random_baseline()
+    else:
+        print("Invalid choice. Please enter 1, 2, 3, or 4.")
 
 if __name__ == "__main__":
     main()
