@@ -92,7 +92,7 @@ import matplotlib.pyplot as plt
 
 def plot_k_scores(k_score_list):
     """
-    Plot the progression of K-scores over iterations.
+    Plot the progression of K-scores over iterations during an experiment
     
     Parameter:
         k_score_list (list): List of K-scores to plot.
@@ -104,4 +104,18 @@ def plot_k_scores(k_score_list):
     plt.ylabel("K-Score")
     plt.grid(True)
     plt.legend()
+    plt.show()
+
+def plot_k_score_distribution(k_scores):
+    """ 
+    Plots the distribution of K-scores based on x runs of experiment
+    Parameter:
+    -k_scores (list) : A list of K-scores to plot
+    """
+    plt.hist(k_scores, bins = 20)
+    plt.title("K-score Distribution")
+    plt.xlabel("K-score")
+    plt.ylabel("Frequency")
+    plt.grid(True)
+
     plt.show()

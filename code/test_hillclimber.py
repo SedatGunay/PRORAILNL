@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-
+from visualizer import plot_k_score_distribution
 from data_loader import load_connections, load_stations
 from hillclimbrandom import HillClimberRailNetwork
 
@@ -26,14 +26,7 @@ def main():
     print("Highest K-Score:", real_highst_k)
     print("Number of Routes used:", len(real_best_traject))
 
-    plt.hist(full_k_scores, edgecolor='black', bins=20)
-
-    plt.title("K-Score Distribution")
-    plt.xlabel("K-Score")
-    plt.ylabel("Frequency")
-    plt.grid(True)
-
-    plt.show()
+    plot_k_score_distribution(full_k_scores)
 
 if __name__ == "__main__":
     main()
