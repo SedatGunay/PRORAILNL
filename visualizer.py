@@ -5,57 +5,65 @@ import geopandas as gpd
 from shapely.geometry import Point, LineString
 import contextily as ctx
 import pandas as pd
+import numpy as np
 
 def visualize_network(rail_network, optimized_trajectories):
+    """
+    Visualizes the railway network using NetworkX and Matplotlib.
+    """
     G = nx.Graph()
 
-    # Voeg knopen toe aan de grafiek
+    # Add stations (nodes) to the graph
     for station in rail_network.stations.values():
-        G.add_node(station.name, pos=(station.x, station.y))  # Gebruik de x en y coördinaten van de station
+        G.add_node(station.name, pos=(station.x, station.y))
 
-    # Voeg verbindingen toe aan de grafiek
+    # Add connections (edges) to the graph
     for connection in rail_network.connections:
         G.add_edge(connection.station1.name, connection.station2.name)
 
-    # Haal de posities op
+    # Retrieve positions for visualization
     pos = nx.get_node_attributes(G, 'pos')
 
-    # Teken het netwerk
+    # Draw the network
     plt.figure(figsize=(12, 8))
     nx.draw(G, pos, with_labels=True, node_size=300, node_color='lightblue', edge_color='grey', font_size=8)
 
-    # Vooraf gedefinieerde kleuren voor de trajecten
+    # Predefined colors for different trajectories
     colors = ['red', 'blue', 'green', 'orange', 'purple', 'cyan', 'magenta', 'yellow']
     legend_labels = []
 
-    # Teken de geoptimaliseerde trajecten met verschillende kleuren
+    # Draw the optimized trajectories with different colors
     for idx, (route, duration) in enumerate(optimized_trajectories):
-        color = colors[idx % len(colors)]  # Herhaal kleuren als er meer trajecten zijn dan kleuren
+        color = colors[idx % len(colors)]  # Cycle through colors if more trajectories exist
         nx.draw_networkx_edges(G, pos, edgelist=[(route[i], route[i + 1]) for i in range(len(route) - 1)],
-                                 edge_color=color, width=2)
-        legend_labels.append(f'Traject {idx + 1}')  # Voeg label toe voor de legenda
+                               edge_color=color, width=2)
+        legend_labels.append(f'Trajectory {idx + 1}')  # Add legend label
 
-    # Voeg de legenda toe
+    # Add legend
     handles = [plt.Line2D([0], [0], color=colors[i % len(colors)], lw=2) for i in range(len(legend_labels))]
-    plt.legend(handles, legend_labels, title="Trajecten", loc='upper left')
+    plt.legend(handles, legend_labels, title="Trajectories", loc='upper left')
 
-    plt.title("Rail Network Visualization")
+    plt.title("Railway Network Visualization")
     plt.show()
 
+
 def visualize_network_on_map(rail_network, optimized_trajectories):
-    # Zet stations om naar een GeoDataFrame en laat het traject op de map van NL zien
+    """
+    Visualizes the railway network on a geographical map using GeoPandas.
+    """
+    # Convert stations to a GeoDataFrame
     station_geometries = [Point(station.x, station.y) for station in rail_network.stations.values()]
     station_names = [station.name for station in rail_network.stations.values()]
     stations_gdf = gpd.GeoDataFrame({"station": station_names}, geometry=station_geometries, crs="EPSG:4326")
 
-    # Zet verbindingen om naar een GeoDataFrame
+    # Convert connections to a GeoDataFrame
     connection_geometries = [
         LineString([(conn.station1.x, conn.station1.y), (conn.station2.x, conn.station2.y)])
         for conn in rail_network.connections
     ]
     connections_gdf = gpd.GeoDataFrame(geometry=connection_geometries, crs="EPSG:4326")
 
-    # Zet trajecten om naar een GeoDataFrame
+    # Convert trajectories to a GeoDataFrame
     trajectory_geometries = []
     for route, _ in optimized_trajectories:
         points = [(rail_network.stations[station].x, rail_network.stations[station].y) for station in route]
@@ -63,40 +71,35 @@ def visualize_network_on_map(rail_network, optimized_trajectories):
 
     trajectories_gdf = gpd.GeoDataFrame(geometry=trajectory_geometries, crs="EPSG:4326")
 
-    # Maak een plot
+    # Create a plot
     fig, ax = plt.subplots(figsize=(12, 10))
 
-    # Voeg de verbindingen toe
+    # Plot connections
     connections_gdf.plot(ax=ax, color="grey", linewidth=0.5, alpha=0.7, label="Connections")
 
-    # Voeg de stations toe
+    # Plot stations
     stations_gdf.plot(ax=ax, color="blue", markersize=10, label="Stations")
 
-    # Voeg trajecten toe met verschillende kleuren
+    # Plot trajectories with different colors
     colors = ['red', 'blue', 'green', 'orange', 'purple', 'cyan', 'magenta', 'yellow']
     for idx, trajectory in enumerate(trajectories_gdf.geometry):
-        trajectories_gdf.iloc[[idx]].plot(ax=ax, color=colors[idx % len(colors)], linewidth=2, label=f"Traject {idx + 1}")
+        trajectories_gdf.iloc[[idx]].plot(ax=ax, color=colors[idx % len(colors)], linewidth=2, label=f"Trajectory {idx + 1}")
 
-    # Voeg een basemap toe
+    # Add a basemap
     ctx.add_basemap(ax, source=ctx.providers.OpenStreetMap.Mapnik, crs="EPSG:4326")
 
-    # Pas layout aan
-    ax.set_title("Rail Network and Trajectories on Map of the Netherlands", fontsize=14)
+    # Adjust layout
+    ax.set_title("Railway Network and Trajectories on the Map", fontsize=14)
     ax.set_xlabel("Longitude", fontsize=12)
     ax.set_ylabel("Latitude", fontsize=12)
     ax.legend(loc="upper right")
 
     plt.show()
 
-# visualizer.py
-import matplotlib.pyplot as plt
 
 def plot_k_scores(k_score_list):
     """
-    Plot the progression of K-scores over iterations during an experiment
-    
-    Parameter:
-        k_score_list (list): List of K-scores to plot.
+    Plots the progression of K-scores over iterations during an experiment.
     """
     plt.figure(figsize=(10, 6))
     plt.plot(range(len(k_score_list)), k_score_list, label="K-Score over Iterations", color="blue")
@@ -107,29 +110,27 @@ def plot_k_scores(k_score_list):
     plt.legend()
     plt.show()
 
+
 def plot_k_score_distribution(k_scores):
-    """ 
-    Plots the distribution of K-scores based on x runs of experiment
-    Parameter:
-    -k_scores (list) : A list of K-scores to plot
     """
-    plt.hist(k_scores, bins = 20)
-    plt.title("K-score Distribution")
-    plt.xlabel("K-score")
+    Plots the distribution of K-scores from multiple experiment runs.
+    """
+    plt.hist(k_scores, bins=20, edgecolor='black', alpha=0.75)
+    plt.title("K-Score Distribution")
+    plt.xlabel("K-Score")
     plt.ylabel("Frequency")
     plt.grid(True)
-
     plt.show()
+
 
 def plot_scores_from_csv(csv_file_path):
     """
     Reads K-scores from a CSV file and plots the distribution.
 
     Parameters:
-        csv_file_path (str): Path to the CSV file containing 'K-Score' column.
-
-    Returns:
-        None
+    -----------
+    csv_file_path : str
+        Path to the CSV file containing the 'K-Score' column.
     """
     try:
         # Load the CSV file
@@ -155,6 +156,20 @@ def plot_scores_from_csv(csv_file_path):
     except Exception as e:
         print(f"Error while plotting scores from {csv_file_path}: {e}")
 
+def plot_duration_vs_score(k_score_list, trajectory_list):
+    """
+    Creates a scatterplot showing the relationship between total duration of trajectories 
+    and their corresponding K-scores.
+    """
+    # Calculate total duration for each set of trajectories
+    total_durations = [sum(len(route) for route in trajectories) if isinstance(trajectories, list) else 0 for trajectories in trajectory_list]
 
-#test 
-plot_scores_from_csv("/Users/sedatgunay/Documents/GitHub/PRORAILNL/data/NZ-Holland/depthclimberdataNZ.csv")
+    
+    plt.figure(figsize=(10, 6))
+    plt.scatter(total_durations, k_score_list, alpha=0.6, c='blue', edgecolors='w', s=100)
+    plt.title("Total Duration vs K-Score")
+    plt.xlabel("Total Duration (in minutes)")
+    plt.ylabel("K-Score")
+    plt.grid(True)
+    plt.show()
+
