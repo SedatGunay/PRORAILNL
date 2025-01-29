@@ -173,3 +173,36 @@ def plot_duration_vs_score(k_score_list, trajectory_list):
     plt.grid(True)
     plt.show()
 
+
+def plot_trajectory_length_vs_score(k_scores, trajectories):
+    """
+    Creates a scatter plot comparing trajectory lengths with their K-scores.
+
+    """
+    # Calculate the length of each trajectory
+    trajectory_lengths = []
+    valid_k_scores = []
+    
+    for k_score, trajectory in zip(k_scores, trajectories):
+        if trajectory:  
+            # Tel het totaal min van stations in alle routes van deze trajectory
+            total_length = sum(len(route) for route in trajectory)
+            trajectory_lengths.append(total_length)
+            valid_k_scores.append(k_score)
+    
+    plt.figure(figsize=(12, 8))
+    plt.scatter(trajectory_lengths, valid_k_scores, alpha=0.6, c='blue', edgecolors='w', s=100)
+    
+    if trajectory_lengths:  
+        # Add trend line
+        z = np.polyfit(trajectory_lengths, valid_k_scores, 1)
+        p = np.poly1d(z)
+        plt.plot(trajectory_lengths, p(trajectory_lengths), "r--", alpha=0.8, label='Trend Line')
+    
+    plt.title("Trajectory Length vs K-Score")
+    plt.xlabel("Total time of trajectory")
+    plt.ylabel("K-Score")
+    plt.grid(True, alpha=0.3)
+    plt.legend()
+    
+    plt.show()

@@ -2,13 +2,12 @@ from classes.rail_network import RailNetwork
 from algorithms.greedy_selector import GreedyRouteSelector
 from utils.helper import find_trajectories
 from utils.scoring import calculate_K_score
-from visualizer import visualize_network_on_map, plot_k_score_distribution, plot_scores_from_csv
+from visualizer import visualize_network_on_map, plot_k_score_distribution, plot_scores_from_csv, plot_trajectory_length_vs_score
 from algorithms.depthclimber import DepthClimberRailNetwork
 import csv
 from algorithms.random_baseline import Baseline
 from algorithms.hillclimbrandom import HillClimberRailNetwork
 import os
-
 def run_hill_climber_random():
     """
     Runs the Hill Climber Random algorithm and saves the results to a CSV file.
@@ -76,36 +75,44 @@ def run_depth_climber(stations_file, connections_file):
 
     # Setup Depth Climber experiment
     full_k_scores = []
+    all_trajectories = []
     real_highst_k = 0
     real_best_traject = None
 
     csv_output_file = 'data/nz-holland/depthclimberdataNZ.csv'
-    os.makedirs(os.path.dirname(csv_output_file), exist_ok=True)  # Ensure directory exists
+    os.makedirs(os.path.dirname(csv_output_file), exist_ok=True)
     
     with open(csv_output_file, mode='w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(['K-Score', 'Trajectory'])
-            
-            for i in range(2, 21):
-                initial_trajectories = depth_network.generate_initial_trajectories(num_trajectories=i)
-                best_trajectory, best_K_score, k_score_list, trajectory_list = depth_network.hill_climber_depth_first(num_iterations=1, initial_trajectories=initial_trajectories)
-            
-                full_k_scores.extend(k_score_list)
+        writer = csv.writer(file)
+        writer.writerow(['K-Score', 'Trajectory'])
+        
+        for i in range(2, 21):
+            initial_trajectories = depth_network.generate_initial_trajectories(num_trajectories=i)
+            best_trajectory, best_K_score, k_score_list, trajectory_list = depth_network.hill_climber_depth_first(
+                num_iterations=1, 
+                initial_trajectories=initial_trajectories
+            )
+        
+            for k_score, trajectory in zip(k_score_list, trajectory_list):
+                full_k_scores.append(k_score)
+                all_trajectories.append(trajectory)
                 
-                # Write each K-score and its corresponding trajectory to the CSV file
-                for k_score, trajectory in zip(k_score_list, trajectory_list):
-                    trajectory_str = ' -> '.join([str(station) for station in trajectory]) 
-                    writer.writerow([k_score, trajectory_str])
+                # Write to CSV
+                trajectory_str = ' -> '.join([str(station) for station in trajectory]) 
+                writer.writerow([k_score, trajectory_str])
 
-                if best_K_score > real_highst_k:
-                    real_highst_k = best_K_score
-                    real_best_traject = best_trajectory
+            if best_K_score > real_highst_k:
+                real_highst_k = best_K_score
+                real_best_traject = best_trajectory
 
     print("Highest K-Score:", real_highst_k)
     print("Number of Routes used:", len(real_best_traject))
 
     # Plot scores from saved CSV file
     plot_scores_from_csv(csv_output_file)
+    
+    # Add new scatter plot with synchronized data
+    plot_trajectory_length_vs_score(full_k_scores, all_trajectories)
 
 def run_random_baseline():
     """
