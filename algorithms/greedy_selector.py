@@ -3,6 +3,8 @@ class GreedyRouteSelector:
         self.connections = connections
 
     def greedy_optimization(self, trajectories, max_routes=20, max_time=180, first_path_index=0):
+        """ Greedy optimisation to select routes based on maximising 
+        of new connections, within a given time limit and maximum number of routes."""
         selected_routes = []
         unique_used_connections = set()
         total_time_used = 0
@@ -22,6 +24,10 @@ class GreedyRouteSelector:
                     "unique_connections": unique_connections,
                 })
 
+        # Sort paths based on greedy criteria:
+        # - First paths with the most new connections
+        # - Then paths with the fewest already used connections
+        # - Finally, the shortest paths (for efficiency)
         path_data.sort(key=lambda x: (-x["new_connections"], x["used_connections"], x["duration"]))
 
         for data in path_data:

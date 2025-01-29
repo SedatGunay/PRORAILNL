@@ -1,12 +1,12 @@
 from classes.rail_network import RailNetwork
-from greedy_selector import GreedyRouteSelector
+from algorithms.greedy_selector import GreedyRouteSelector
 from utils.helper import find_trajectories
 from utils.scoring import calculate_K_score
 from visualizer import visualize_network_on_map, plot_k_score_distribution, plot_scores_from_csv
-from depthclimber import DepthClimberRailNetwork
+from algorithms.depthclimber import DepthClimberRailNetwork
 import csv
-from random_baseline import Baseline
-from hillclimbrandom import HillClimberRailNetwork
+from algorithms.random_baseline import Baseline
+from algorithms.hillclimbrandom import HillClimberRailNetwork
 import os
 
 def run_hill_climber_random():
