@@ -1,6 +1,6 @@
 import copy
 import random
-from depth_first import DepthFirstRailNetwork
+from code.algorithms.depth_first import DepthFirstRailNetwork
 from utils.scoring import calculate_K_score
 
 class DepthClimberRailNetwork(DepthFirstRailNetwork):

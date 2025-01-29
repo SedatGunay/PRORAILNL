@@ -4,7 +4,7 @@ from classes.connection import Connection
 import csv
 
 class RailNetwork:
-    def __init__(self, max_time_limit):
+    def __init__(self, max_time_limit=None):
         self.stations = {}
         self.connections = []
         self.connection_map = defaultdict(list)

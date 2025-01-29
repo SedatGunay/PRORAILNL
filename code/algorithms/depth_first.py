@@ -2,9 +2,6 @@ from classes.rail_network import RailNetwork
 
 class DepthFirstRailNetwork(RailNetwork):
     def __init__(self, max_time_limit=None):
-        """
-        Extends RailNetwork to include a maximum time limit for route searches.
-        """
         super().__init__(max_time_limit)
 
     def depth_first_search(self, current_station, end_station, visited_stations, current_route, current_time, routes):
