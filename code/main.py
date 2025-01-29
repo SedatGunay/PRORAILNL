@@ -1,20 +1,19 @@
 from classes.rail_network import RailNetwork
-from code.algorithms.greedy_selector import GreedyRouteSelector
+from greedy_selector import GreedyRouteSelector
 from utils.helper import find_trajectories
 from utils.scoring import calculate_K_score
 from visualizer import visualize_network_on_map, plot_k_score_distribution, plot_scores_from_csv
-from code.algorithms.depthclimber import DepthClimberRailNetwork
+from depthclimber import DepthClimberRailNetwork
 import csv
-from code.algorithms.random_baseline import Baseline
-from code.algorithms.hillclimbrandom import HillClimberRailNetwork
+from random_baseline import Baseline
+from hillclimbrandom import HillClimberRailNetwork
+import os
 
 def run_hill_climber_random():
     """
     Runs the Hill Climber Random algorithm and saves the results to a CSV file.
     """
     rail_network = HillClimberRailNetwork(max_time_limit=180)
-    # rail_network.load_stations(r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\StationsNationaal.csv")
-    # rail_network.load_connections(r"C:\Users\koste\Documents\GitHub\PRORAILNL\data\NL\ConnectiesNationaal.csv")
     rail_network.load_stations("data/NL/StationsNationaal.csv")
     rail_network.load_connections("data/NL/ConnectiesNationaal.csv")
     full_k_scores = []
@@ -81,6 +80,8 @@ def run_depth_climber(stations_file, connections_file):
     real_best_traject = None
 
     csv_output_file = 'data/nz-holland/depthclimberdataNZ.csv'
+    os.makedirs(os.path.dirname(csv_output_file), exist_ok=True)  # Ensure directory exists
+    
     with open(csv_output_file, mode='w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(['K-Score', 'Trajectory'])
